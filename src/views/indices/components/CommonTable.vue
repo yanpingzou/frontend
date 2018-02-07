@@ -1,9 +1,9 @@
 <style lang="less">
-    @import './components/editable-table.less';
+    @import './common-table.less';
 </style>
 
 <template>
-    <Row>
+    <Row class="margin-top-10">
         <Col>
             <div class="edittable-table-height-con">
                 <Table size="default" :ref="refs" :data="tableData" :columns="tableColumns" border stripe></Table>
@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import tableData1 from './components/table_data';
-
 const editButton = (vm, h, currentRow, index) => {
     return h('Button', {
         props: {
@@ -31,12 +29,7 @@ const editButton = (vm, h, currentRow, index) => {
         },
         on: {
             'click': () => {
-                vm.$router.push({
-                    name: 'edit-indices',
-                    params: {
-                        id: index + 1
-                    }
-                });
+                vm.$emit('on-edit', currentRow);
             }
         }
     }, '编辑');
@@ -65,7 +58,8 @@ const deleteButton = (vm, h, currentRow, index) => {
         },
         on: {
             'on-ok': () => {
-                vm.deleteIndex(index); // 设置删除方法
+                // vm.deleteIndex(index); // 设置删除方法
+                vm.$emit('on-delete', (vm.currentPage - 1) * vm.pageSize + index);
             }
         }
     }, [
@@ -83,7 +77,7 @@ export default {
     props: {
         refs: String,
         columnsList: Array,
-        data: Array
+        value: Array
     },
     data () {
         return {
@@ -104,22 +98,15 @@ export default {
                 }
             });
         },
-        getData () {
-            this.tableColumns = this.columnsList;
-            this.tableDataHistory = this.data;
-        },
         init () {
-            if (this.tableDataHistory.length < this.pageSize) {
-                this.tableData = this.tableDataHistory;
-            } else {
-                this.tableData = this.tableDataHistory.slice(0, this.pageSize);
-            }
+            this.tableColumns = this.columnsList;
+            this.tableDataHistory = this.value;
             this.refreshTable();
         },
         refreshTable () {
             this.totalCount = this.tableDataHistory.length;
             this.tableData = this.tableDataHistory.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
-            if (this.tableData.length === 0) {
+            if (this.tableData.length === 0 && this.currentPage > 1) {
                 this.changePage(this.currentPage - 1);
             }
             this.tableColumns.forEach(item => {
@@ -148,17 +135,15 @@ export default {
         changeSize (value) {
             this.pageSize = value;
             this.refreshTable();
-        },
-        deleteIndex (index) {
-            this.tableDataHistory.splice((this.currentPage - 1) * this.pageSize + index, 1);
-            this.refreshTable();
         }
     },
-    computed: {
-    },
     created () {
-        this.getData();
         this.init();
+    },
+    watch: {
+        value (data) {
+            this.init();
+        }
     }
 };
 </script>

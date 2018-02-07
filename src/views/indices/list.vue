@@ -1,7 +1,7 @@
 <style lang="less">
     @import '../../styles/common.less';
     /*@import './components/table.less';*/
-    @import './components/editable-table.less';
+    @import './components/common-table.less';
 </style>
 
 <template>
@@ -17,20 +17,15 @@
                         <Button type="primary" size="small" icon="plus" @click="createIndices">新增索引</Button>
                     </p>
                     <Row>
-                        <Col>
-                            <div class="edittable-table-height-con">
-                                <Table :data="tableData" :columns="tableColumns" border stripe></Table>
-                            </div>
-                        </Col>
-                        <Col>
-                            <div style="margin: 10px;overflow: hidden">
-                                <div style="float: right;">
-                                    <Page :total="totalCount" :page-size="pageSize" :current="currentPage" 
-                                    show-elevator show-sizer show-total @on-page-size-change="changeSize" @on-change="changePage"></Page>
-                                </div>
-                            </div>
-                        </Col>
+                        <Input v-model="searchIndices" icon="search" @on-change="handleSearchIndices" placeholder="请输入索引名称搜索..." style="width: 220px" />
                     </Row>
+                    <common-table 
+                        refs="listIndices" 
+                        v-model="listData" 
+                        :columns-list="listColumns"
+                        @on-delete="handleDelete"
+                        @on-edit="handleEdit"
+                    ></common-table>
                 </Card>
             </Col>
         </Row>
@@ -39,72 +34,19 @@
 
 <script>
 import tableData1 from './components/table_data';
-
-const editButton = (vm, h, currentRow, index) => {
-    return h('Button', {
-        props: {
-            type: 'success',
-            size: 'default'
-        },
-        on: {
-            'click': () => {
-                vm.$router.push({
-                    name: 'edit-indices',
-                    params: {
-                        id: index + 1
-                    }
-                });
-            }
-        }
-    }, '编辑');
-};
-
-const enableButton = (vm, h, currentRow, index) => {
-    const color = currentRow.status === 'enable' ? '#19be6b' : '#ed3f14';
-    const text = currentRow.status === 'enable' ? '启用' : '禁用';
-    return h('Tag', {
-        props: {
-            type: 'dot',
-            color: color
-        }
-    }, text);
-};
-
-const deleteButton = (vm, h, currentRow, index) => {
-    return h('Poptip', {
-        props: {
-            confirm: true,
-            title: '您确定要删除这条数据吗?',
-            transfer: true
-        },
-        style: {
-            margin: '0 5px'
-        },
-        on: {
-            'on-ok': () => {
-                vm.deleteIndex(index); // 设置删除方法
-            }
-        }
-    }, [
-        h('Button', {
-            props: {
-                type: 'error',
-                size: 'default'
-            }
-        }, '删除')
-    ]);
-};
+import CommonTable from './components/CommonTable.vue';
 
 export default {
     name: 'list-indices',
+    components: {
+        CommonTable
+    },
     data () {
         return {
-            totalCount: 0,
-            pageSize: 10,
-            currentPage: 1,
-            tableDataHistory: [],
-            tableColumns: [],
-            tableData: []
+            listColumns: [],
+            listData: [],
+            initListData: [],
+            searchIndices: ''
         };
     },
     methods: {
@@ -117,46 +59,38 @@ export default {
             });
         },
         init () {
-            this.tableColumns = tableData1.editInlineColumns;
-            this.tableDataHistory = tableData1.editInlineData;
-            this.refreshTable();
+            this.listColumns = tableData1.editInlineColumns;
+            this.listData = this.initListData = tableData1.editInlineData;
         },
-        refreshTable () {
-            this.totalCount = this.tableDataHistory.length;
-            this.tableData = this.tableDataHistory.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
-            if (this.tableData.length === 0) {
-                this.changePage(this.currentPage - 1);
-            }
-            this.tableColumns.forEach(item => {
-                if (item.handle) {
-                    item.render = (h, param) => {
-                        let currentRowData = this.tableData[param.index];
-                        let children = [];
-                        item.handle.forEach(item => {
-                            if (item === 'edit') {
-                                children.push(editButton(this, h, currentRowData, param.index));
-                            } else if (item === 'delete') {
-                                children.push(deleteButton(this, h, currentRowData, param.index));
-                            } else if (item === 'enable') {
-                                children.push(enableButton(this, h, currentRowData, param.index));
-                            }
-                        });
-                        return h('div', children);
-                    };
+        handleDelete (index) {
+            // console.log('llks', index, row);
+            this.initListData.splice(index, 1);
+            this.listData = this.initListData;
+        },
+        handleEdit (row) {
+            this.$router.push({
+                name: 'edit-indices',
+                params: {
+                    id: row.id
                 }
             });
         },
-        changePage (index) {
-            this.currentPage = index;
-            this.refreshTable();
+        search (data, argumentObj) {
+            let res = data;
+            let dataClone = data;
+            for (let argu in argumentObj) {
+                if (argumentObj[argu].length > 0) {
+                    res = dataClone.filter(d => {
+                        return d[argu].indexOf(argumentObj[argu]) > -1;
+                    });
+                    dataClone = res;
+                }
+            }
+            return res;
         },
-        changeSize (value) {
-            this.pageSize = value;
-            this.refreshTable();
-        },
-        deleteIndex (index) {
-            this.tableDataHistory.splice((this.currentPage - 1) * this.pageSize + index, 1);
-            this.refreshTable();
+        handleSearchIndices () {
+            this.listData = this.initListData;
+            this.listData = this.search(this.listData, {name: this.searchIndices});
         }
     },
     created () {
