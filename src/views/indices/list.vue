@@ -116,20 +116,17 @@ export default {
                 }
             });
         },
-        getData () {
+        init () {
             this.tableColumns = tableData1.editInlineColumns;
             this.tableDataHistory = tableData1.editInlineData;
-            this.totalCount = this.tableDataHistory.length;
-        },
-        init () {
-            if (this.tableDataHistory.length < this.pageSize) {
-                this.tableData = this.tableDataHistory;
-            } else {
-                this.tableData = this.tableDataHistory.slice(0, this.pageSize);
-            }
             this.refreshTable();
         },
         refreshTable () {
+            this.totalCount = this.tableDataHistory.length;
+            this.tableData = this.tableDataHistory.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+            if (this.tableData.length === 0) {
+                this.changePage(this.currentPage - 1);
+            }
             this.tableColumns.forEach(item => {
                 if (item.handle) {
                     item.render = (h, param) => {
@@ -151,28 +148,18 @@ export default {
         },
         changePage (index) {
             this.currentPage = index;
-            this.tableData = this.tableDataHistory.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
             this.refreshTable();
         },
         changeSize (value) {
             this.pageSize = value;
-            this.tableData = this.tableDataHistory.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
             this.refreshTable();
         },
         deleteIndex (index) {
             this.tableDataHistory.splice((this.currentPage - 1) * this.pageSize + index, 1);
-            this.totalCount = this.tableDataHistory.length;
-            this.tableData = this.tableDataHistory.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
-            if (this.tableData.length === 0) {
-                this.changePage(this.currentPage - 1);
-            }
             this.refreshTable();
         }
     },
-    computed: {
-    },
     created () {
-        this.getData();
         this.init();
     }
 };
