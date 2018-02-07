@@ -18,12 +18,7 @@ export const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     Util.title(to.meta.title);
-    if (Cookies.get('locking') === '1' && to.name !== 'locking') { // 判断当前是否是锁定状态
-        next({
-            replace: true,
-            name: 'locking'
-        });
-    } else if (Cookies.get('locking') === '0' && to.name === 'locking') {
+    if (Cookies.get('locking') === '0' && to.name === 'locking') {
         next(false);
     } else {
         if (!Cookies.get('user') && to.name !== 'login') { // 判断是否已经登录且前往的页面不是登录页
