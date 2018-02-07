@@ -21,56 +21,7 @@
 </template>
 
 <script>
-const editButton = (vm, h, currentRow, index) => {
-    return h('Button', {
-        props: {
-            type: 'success',
-            size: 'default'
-        },
-        on: {
-            'click': () => {
-                vm.$emit('on-edit', currentRow);
-            }
-        }
-    }, '编辑');
-};
-
-const enableButton = (vm, h, currentRow, index) => {
-    const color = currentRow.status === 'enable' ? '#19be6b' : '#ed3f14';
-    const text = currentRow.status === 'enable' ? '启用' : '禁用';
-    return h('Tag', {
-        props: {
-            type: 'dot',
-            color: color
-        }
-    }, text);
-};
-
-const deleteButton = (vm, h, currentRow, index) => {
-    return h('Poptip', {
-        props: {
-            confirm: true,
-            title: '您确定要删除这条数据吗?',
-            transfer: true
-        },
-        style: {
-            margin: '0 5px'
-        },
-        on: {
-            'on-ok': () => {
-                // vm.deleteIndex(index); // 设置删除方法
-                vm.$emit('on-delete', currentRow);
-            }
-        }
-    }, [
-        h('Button', {
-            props: {
-                type: 'error',
-                size: 'default'
-            }
-        }, '删除')
-    ]);
-};
+import * as tableButton from './common-table.js';
 
 export default {
     name: 'CommonTable',
@@ -117,11 +68,15 @@ export default {
                         let children = [];
                         item.handle.forEach(item => {
                             if (item === 'edit') {
-                                children.push(editButton(this, h, currentRowData, param.index));
+                                children.push(tableButton.editButton(this, h, currentRowData, param.index));
                             } else if (item === 'delete') {
-                                children.push(deleteButton(this, h, currentRowData, param.index));
-                            } else if (item === 'enable') {
-                                children.push(enableButton(this, h, currentRowData, param.index));
+                                children.push(tableButton.deleteButton(this, h, currentRowData, param.index));
+                            } else if (item === 'analysis') {
+                                children.push(tableButton.analysisButton(this, h, currentRowData, param.index));
+                            } else if (item === 'status') {
+                                children.push(tableButton.statusButton(this, h, currentRowData, param.index));
+                            } else if (item === 'checked') {
+                                children.push(tableButton.checked(this, h, currentRowData, param.index));
                             }
                         });
                         return h('div', children);

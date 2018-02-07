@@ -8,8 +8,7 @@ var editInlineColumns = [
     {
         title: '索引名称',
         align: 'center',
-        key: 'name',
-        editable: true
+        key: 'name'
     },
     {
         title: '项目组',
@@ -17,16 +16,27 @@ var editInlineColumns = [
         key: 'sex'
     },
     {
-        title: '状态',
+        title: '索引状态',
         align: 'center',
         key: 'status',
-        editable: true,
-        handle: ['enable']
+        handle: ['status']
     },
     {
         title: '修改时间',
         align: 'center',
         key: 'update_time'
+    },
+    {
+        title: '配置校验',
+        align: 'center',
+        key: 'checked',
+        handle: ['checked']
+    },
+    {
+        title: '性能分析',
+        align: 'center',
+        key: 'analysis',
+        handle: ['analysis']
     },
     {
         title: '操作',
@@ -43,7 +53,8 @@ var editInlineData = [
         name: 'dr_uniauth_logs1',
         sex: 'uniauth',
         status: 'enable',
-        update_time: '2018-01-02 21:34:53'
+        update_time: '2018-01-02 21:34:53',
+        checked: 1
     },
     {
         id: 2,
@@ -57,7 +68,8 @@ var editInlineData = [
         name: 'dr_uniauth_logs3',
         sex: 'uniauth',
         status: 'enable',
-        update_time: '2018-01-02 21:34:53'
+        update_time: '2018-01-02 21:34:53',
+        checked: 1
     },
     {
         id: 4,
@@ -71,14 +83,16 @@ var editInlineData = [
         name: 'dr_uniauth_logs5',
         sex: 'uniauth',
         status: 'disable',
-        update_time: '2018-01-02 21:34:53'
+        update_time: '2018-01-02 21:34:53',
+        checked: 1
     },
     {
         id: 6,
         name: 'dr_uniauth_logs6',
         sex: 'uniauth',
         status: 'enable',
-        update_time: '2018-01-02 21:34:53'
+        update_time: '2018-01-02 21:34:53',
+        checked: 1
     },
     {
         id: 7,

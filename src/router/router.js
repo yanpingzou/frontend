@@ -47,6 +47,8 @@ export const otherRouter = {
         { path: 'home', title: '首页', name: 'home_index', component: () => import('@/views/home/home.vue') },
         { path: 'indices/create', title: '新增索引', name: 'create-indices', component: () => import('@/views/indices/edit.vue') },
         { path: 'indices/:id(\\d+)', title: '编辑索引', name: 'edit-indices', component: () => import('@/views/indices/edit.vue') },
+        { path: 'indices/:id(\\d+)/analysis', title: '日志性能分析', name: 'analysis-indices', component: () => import('@/views/indices/analysis.vue') },
+        { path: 'indices/:id(\\d+)/checked', title: '校验信息', name: 'checked-indices', component: () => import('@/views/indices/checked.vue') },
     ]
 };
 
@@ -66,14 +68,14 @@ export const appRouter = [
         redirect: '/indices/list',
         icon: 'android-options',
         name: 'component',
-        title: '索引查看',
+        title: '索引概览',
         component: Main,
         children: [
             {
                 path: 'list',
                 icon: 'android-options',
                 name: 'list-indices',
-                title: '索引查看',
+                title: '索引概览',
                 component: () => import('@/views/indices/list.vue')
             }
         ]

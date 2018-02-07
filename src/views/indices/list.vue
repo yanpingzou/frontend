@@ -11,7 +11,7 @@
                 <Card>
                     <p slot="title">
                         <Icon type="qr-scanner"></Icon>
-                        &nbsp;索引列表
+                        &nbsp;索引概览
                     </p>
                     <p slot="extra">
                         <Button type="primary" size="small" icon="plus" @click="createIndices">新增索引</Button>
@@ -25,6 +25,8 @@
                         :columns-list="listColumns"
                         @on-delete="handleDelete"
                         @on-edit="handleEdit"
+                        @on-analysis="handleAnalysis"
+                        @on-checked="handlechecked"
                     ></common-table>
                 </Card>
             </Col>
@@ -62,23 +64,6 @@ export default {
             this.listColumns = tableData1.editInlineColumns;
             this.listData = this.initListData = tableData1.editInlineData;
         },
-        handleDelete (row) {
-            for (let index in this.initListData) {
-                if (this.initListData[index].id === row.id) {
-                    this.initListData.splice(index, 1);
-                }
-            }
-            this.listData = this.initListData;
-            this.$Message.success('删除成功');
-        },
-        handleEdit (row) {
-            this.$router.push({
-                name: 'edit-indices',
-                params: {
-                    id: row.id
-                }
-            });
-        },
         search (data, argumentObj) {
             let res = data;
             let dataClone = data;
@@ -95,7 +80,40 @@ export default {
         handleSearchIndices () {
             this.listData = this.initListData;
             this.listData = this.search(this.listData, {name: this.searchIndices});
-        }
+        },
+        handleEdit (row) {
+            this.$router.push({
+                name: 'edit-indices',
+                params: {
+                    id: row.id
+                }
+            });
+        },
+        handleDelete (row) {
+            for (let index in this.initListData) {
+                if (this.initListData[index].id === row.id) {
+                    this.initListData.splice(index, 1);
+                }
+            }
+            this.listData = this.initListData;
+            this.$Message.success('删除成功');
+        },
+        handleAnalysis (row) {
+            this.$router.push({
+                name: 'analysis-indices',
+                params: {
+                    id: row.id
+                }
+            });
+        },
+        handlechecked (row) {
+            this.$router.push({
+                name: 'checked-indices',
+                params: {
+                    id: row.id
+                }
+            });
+        },
     },
     created () {
         this.init();
