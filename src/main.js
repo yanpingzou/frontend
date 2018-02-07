@@ -39,5 +39,9 @@ new Vue({
             }
         });
         this.$store.commit('setTagsList', tagsList);
+        this.$Message.config({
+            top: 15,
+            duration: 3
+        });
     }
 });

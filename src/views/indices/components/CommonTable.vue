@@ -59,7 +59,7 @@ const deleteButton = (vm, h, currentRow, index) => {
         on: {
             'on-ok': () => {
                 // vm.deleteIndex(index); // 设置删除方法
-                vm.$emit('on-delete', (vm.currentPage - 1) * vm.pageSize + index);
+                vm.$emit('on-delete', currentRow);
             }
         }
     }, [
@@ -107,7 +107,8 @@ export default {
             this.totalCount = this.tableDataHistory.length;
             this.tableData = this.tableDataHistory.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
             if (this.tableData.length === 0 && this.currentPage > 1) {
-                this.changePage(this.currentPage - 1);
+                this.currentPage -= 1;
+                this.tableData = this.tableDataHistory.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
             }
             this.tableColumns.forEach(item => {
                 if (item.handle) {

@@ -62,10 +62,14 @@ export default {
             this.listColumns = tableData1.editInlineColumns;
             this.listData = this.initListData = tableData1.editInlineData;
         },
-        handleDelete (index) {
-            // console.log('llks', index, row);
-            this.initListData.splice(index, 1);
+        handleDelete (row) {
+            for (let index in this.initListData) {
+                if (this.initListData[index].id === row.id) {
+                    this.initListData.splice(index, 1);
+                }
+            }
             this.listData = this.initListData;
+            this.$Message.success('删除成功');
         },
         handleEdit (row) {
             this.$router.push({
