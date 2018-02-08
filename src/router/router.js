@@ -68,14 +68,14 @@ export const appRouter = [
         redirect: '/indices/list',
         icon: 'android-options',
         name: 'component',
-        title: '索引概览',
+        title: '日志概览',
         component: Main,
         children: [
             {
                 path: 'list',
                 icon: 'android-options',
                 name: 'list-indices',
-                title: '索引概览',
+                title: '日志概览',
                 component: () => import('@/views/indices/list.vue')
             }
         ]

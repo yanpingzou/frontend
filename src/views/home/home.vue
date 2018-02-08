@@ -82,7 +82,7 @@
                             id-name="visit_count"
                             :end-val="count.visit"
                             iconType="ios-eye"
-                            color="#64d572"
+                            color="#f25e43"
                             :iconSize="50"
                             intro-text="今日浏览量"
                         ></infor-card>
@@ -92,7 +92,7 @@
                             id-name="collection_count"
                             :end-val="count.collection"
                             iconType="upload"
-                            color="#ffd572"
+                            color="#f25e43"
                             intro-text="今日数据采集量"
                         ></infor-card>
                     </Col>

@@ -11,7 +11,7 @@
                 <Card>
                     <p slot="title">
                         <Icon type="qr-scanner"></Icon>
-                        &nbsp;索引概览
+                        &nbsp;索引列表
                     </p>
                     <p slot="extra">
                         <Button type="primary" size="small" icon="plus" @click="createIndices">新增索引</Button>
