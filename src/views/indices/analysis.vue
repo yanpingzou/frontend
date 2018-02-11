@@ -20,7 +20,7 @@
                             iconType="leaf"
                             color="#64d572"
                             :iconSize="50"
-                            intro-text="index Green"
+                            intro-text="Index Green"
                         ></infor-card>
                     </Col>
                     <Col span="8" :style="{marginBottom: '10px'}">
@@ -30,7 +30,7 @@
                             iconType="flame"
                             color="#ffd572"
                             :iconSize="50"
-                            intro-text="index Yellow"
+                            intro-text="Index Yellow"
                         ></infor-card>
                     </Col>
                     <Col span="8" :style="{marginBottom: '10px'}">
@@ -40,7 +40,7 @@
                             iconType="nuclear"
                             color="#f25e43"
                             :iconSize="50"
-                            intro-text="index Red"
+                            intro-text="Index Red"
                         ></infor-card>
                     </Col>
                 </Row>
@@ -50,7 +50,7 @@
             <Card class="card-height-300">
                 <p slot="title">
                     <Icon type="arrow-graph-up-right"></Icon>
-                    &nbsp;近30天增长趋势
+                    &nbsp;近30天日志增长趋势（单位：GB）
                 </p>
                 <div style="height:220px;">
                   <indices-storge-line></indices-storge-line>

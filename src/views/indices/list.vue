@@ -5,7 +5,7 @@
 </style>
 
 <template>
-    <div>
+    <div style="min-width:1230px;">
         <Row>
             <Col>
                 <Card>

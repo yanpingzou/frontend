@@ -27,11 +27,11 @@
                             <div class="line-gray"></div>
                             <Row class="margin-top-8">
                                 <Col span="8"><p class="notwrap">上次登录时间:</p></Col>
-                                <Col span="16" class="padding-left-8">2017.09.12-13:32:20</Col>
+                                <Col span="16" class="padding-left-8">2018/2/08 13:32:20</Col>
                             </Row>
                             <Row class="margin-top-8">
                                 <Col span="8"><p class="notwrap">上次登录地点:</p></Col>
-                                <Col span="16" class="padding-left-8">北京</Col>
+                                <Col span="16" class="padding-left-8">成都</Col>
                             </Row>
                         </Card>
                     </Col>
@@ -39,28 +39,9 @@
                         <Card>
                             <p slot="title" class="card-title">
                                 <Icon type="android-checkbox-outline"></Icon>
-                                待办事项
+                                登录信息
                             </p>
-                            <a type="text" slot="extra" @click.prevent="addNewToDoItem">
-                                <Icon type="plus-round"></Icon>
-                            </a>
-                            <Modal
-                                v-model="showAddNewTodo"
-                                title="添加新的待办事项"
-                                @on-ok="addNew"
-                                @on-cancel="cancelAdd">
-                                <Row type="flex" justify="center">
-                                    <Input v-model="newToDoItemValue" icon="compose" placeholder="请输入..." style="width: 300px" />
-                                </Row>
-                                <Row slot="footer">
-                                    <Button type="text" @click="cancelAdd">取消</Button>
-                                    <Button type="primary" @click="addNew">确定</Button>
-                                </Row>
-                            </Modal>
                             <div class="to-do-list-con">
-                                <div v-for="(item, index) in toDoList" :key="'todo-item' + (toDoList.length - index)" class="to-do-item">
-                                    <to-do-list-item :content="item.title"></to-do-list-item>
-                                </div>
                             </div>
                         </Card>
                     </Col>
@@ -71,38 +52,38 @@
                     <Col :xs="24" :sm="12" :md="6" :style="{marginBottom: '10px'}">
                         <infor-card
                             id-name="user_created_count"
-                            :end-val="count.createUser"
-                            iconType="android-person-add"
+                            :end-val="index.total"
+                            iconType="android-cloud-outline"
                             color="#2d8cf0"
-                            intro-text="今日新增用户"
+                            intro-text="Index Total"
                         ></infor-card>
                     </Col>
                     <Col :xs="24" :sm="12" :md="6" :style="{marginBottom: '10px'}">
                         <infor-card
                             id-name="visit_count"
-                            :end-val="count.visit"
-                            iconType="ios-eye"
-                            color="#f25e43"
+                            :end-val="index.green"
+                            iconType="leaf"
+                            color="#64d572"
                             :iconSize="50"
-                            intro-text="今日浏览量"
+                            intro-text="Index Green"
                         ></infor-card>
                     </Col>
                     <Col :xs="24" :sm="12" :md="6" :style="{marginBottom: '10px'}">
                         <infor-card
                             id-name="collection_count"
-                            :end-val="count.collection"
-                            iconType="upload"
-                            color="#f25e43"
-                            intro-text="今日数据采集量"
+                            :end-val="index.yellow"
+                            iconType="flame"
+                            color="#ffd572"
+                            intro-text="Index Yellow"
                         ></infor-card>
                     </Col>
                     <Col :xs="24" :sm="12" :md="6" :style="{marginBottom: '10px'}">
                         <infor-card
                             id-name="transfer_count"
-                            :end-val="count.transfer"
-                            iconType="shuffle"
+                            :end-val="index.red"
+                            iconType="nuclear"
                             color="#f25e43"
-                            intro-text="今日服务调用量"
+                            intro-text="Index Red"
                         ></infor-card>
                     </Col>
                 </Row>
@@ -110,16 +91,12 @@
                     <Card :padding="0">
                         <p slot="title" class="card-title">
                             <Icon type="map"></Icon>
-                            今日服务调用地理分布
+                            集群健康状态
                         </p>
                         <div class="map-con">
                             <Col span="10">
-                                <map-data-table :cityData="cityData" height="281" :style-obj="{margin: '12px 0 0 11px'}"></map-data-table>
                             </Col>
                             <Col span="14" class="map-incon">
-                                <Row type="flex" justify="center" align="middle">
-                                    <home-map :city-data="cityData"></home-map>
-                                </Row>
                             </Col>
                         </div>
                     </Card>
@@ -131,10 +108,9 @@
                 <Card>
                     <p slot="title" class="card-title">
                         <Icon type="android-map"></Icon>
-                        上周每日来访量统计
+                        集群各节点信息摘要
                     </p>
                     <div class="data-source-row">
-                        <visite-volume></visite-volume>
                     </div>
                 </Card>
             </Col>
@@ -142,10 +118,9 @@
                 <Card>
                     <p slot="title" class="card-title">
                         <Icon type="ios-pulse-strong"></Icon>
-                        数据来源统计
+                        近一周每日新增日志统计
                     </p>
                     <div class="data-source-row">
-                        <data-source-pie></data-source-pie>
                     </div>
                 </Card>
             </Col>
@@ -153,10 +128,9 @@
                 <Card>
                     <p slot="title" class="card-title">
                         <Icon type="android-wifi"></Icon>
-                        各类用户服务调用变化统计
+                        最近一周每日新增日志量统计
                     </p>
                     <div class="data-source-row">
-                        <user-flow></user-flow>
                     </div>
                 </Card>
             </Col>
@@ -165,10 +139,9 @@
             <Card>
                 <p slot="title" class="card-title">
                     <Icon type="ios-shuffle-strong"></Icon>
-                    上周每日服务调用量(万)
+                    最近一月每日新增日志量统计
                 </p>
                 <div class="line-chart-con">
-                    <service-requests></service-requests>
                 </div>
             </Card>
         </Row>
@@ -219,11 +192,11 @@ export default {
                     title: '去iView官网学习完整的iView组件'
                 }
             ],
-            count: {
-                createUser: 496,
-                visit: 3264,
-                collection: 24389305,
-                transfer: 39503498
+            index: {
+                total: 496,
+                green: 484,
+                yellow: 12,
+                red: 0
             },
             cityData: cityData,
             showAddNewTodo: false,
